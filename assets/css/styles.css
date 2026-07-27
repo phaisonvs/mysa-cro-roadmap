@@ -1,0 +1,264 @@
+:root{
+  --black:#1A1A1A;
+  --yellow:#FFBB00;
+  --gray-line:#E4E4E4;
+  --gray-text:#6B6B6B;
+  --gray-bar:#B9B9B9;
+  --white:#FFFFFF;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  padding:0;
+  font-family:Calibri, "Segoe UI", Arial, sans-serif;
+  background:var(--white);
+  color:var(--black);
+}
+
+header{
+  background:var(--black);
+  color:var(--white);
+  padding:22px 32px 18px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+header h1{
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+header p{
+  margin:4px 0 0 0;
+  font-size:12.5px;
+  color:#CFCFCF;
+}
+
+.legend{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  font-size:11.5px;
+}
+
+.legend span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.swatch{
+  width:12px;
+  height:12px;
+  border-radius:2px;
+  display:inline-block;
+}
+
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:14px 32px 6px 32px;
+  flex-wrap:wrap;
+  background:#FAFAFA;
+  border-bottom:1px solid var(--gray-line);
+}
+
+.chipgroup{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  border:1px solid #D8D8D8;
+  background:var(--white);
+  color:var(--black);
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.chip.active{
+  background:var(--yellow);
+  border-color:var(--yellow);
+  font-weight:700;
+}
+
+.hint{
+  font-size:11px;
+  color:var(--gray-text);
+  font-style:italic;
+}
+
+#wrap{
+  overflow-x:auto;
+  padding:0 0 30px 0;
+  cursor:grab;
+  user-select:none;
+}
+
+#wrap.dragging{cursor:grabbing;}
+
+#chart{
+  min-width:1180px;
+  position:relative;
+  padding:18px 32px 0 32px;
+}
+
+.cyclehead{
+  display:flex;
+  margin-left:280px;
+  border-bottom:2px solid var(--black);
+}
+
+.cyclehead div{
+  flex:1;
+  text-align:center;
+  font-size:11.5px;
+  font-weight:700;
+  padding:6px 2px;
+  border-left:1px solid var(--gray-line);
+}
+
+.cyclehead div small{
+  display:block;
+  font-weight:400;
+  color:var(--gray-text);
+  font-size:10px;
+}
+
+.group{margin-top:6px;}
+
+.group-title{
+  font-size:12.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  color:var(--white);
+  background:var(--black);
+  padding:6px 10px;
+  margin-left:0;
+  display:flex;
+  justify-content:space-between;
+}
+
+.row{
+  display:flex;
+  align-items:flex-start;
+  border-bottom:1px solid var(--gray-line);
+  min-height:36px;
+}
+
+.row:hover{background:#FFFBEF;}
+
+.rowlabel{
+  width:280px;
+  flex:0 0 280px;
+  font-size:12px;
+  padding:8px 10px 8px 4px;
+  line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  cursor:pointer;
+  transition:background .15s ease;
+}
+
+.rowlabel.expanded{
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  background:#FFF6DC;
+}
+
+.rowlabel b{font-weight:700;}
+
+.rowlabel .obs{
+  display:none;
+  font-size:11px;
+  color:var(--gray-text);
+  margin-top:4px;
+}
+
+.rowlabel.expanded .obs{display:block;}
+
+.expand-icon{
+  color:var(--gray-text);
+  font-size:10px;
+  margin-left:4px;
+}
+
+.track{
+  position:relative;
+  flex:1;
+  min-height:36px;
+  background:repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(100% / 6 - 1px),
+    var(--gray-line) calc(100% / 6 - 1px),
+    var(--gray-line) calc(100% / 6)
+  );
+}
+
+.bar{
+  position:absolute;
+  top:8px;
+  height:20px;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  padding:0 6px;
+  font-size:10.5px;
+  color:var(--black);
+  white-space:nowrap;
+  overflow:hidden;
+  cursor:pointer;
+  border:1px solid rgba(0,0,0,.15);
+}
+
+.bar.status-Backlog{
+  background:var(--gray-bar);
+  color:#1A1A1A;
+}
+
+.bar.status-Pendente{background:#FFE9B3;}
+
+.bar.status-Em-andamento{
+  background:var(--yellow);
+  font-weight:700;
+}
+
+.tooltip{
+  position:fixed;
+  background:var(--black);
+  color:var(--white);
+  padding:10px 12px;
+  border-radius:6px;
+  font-size:12px;
+  max-width:340px;
+  line-height:1.4;
+  z-index:50;
+  pointer-events:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+  display:none;
+}
+
+.tooltip b{color:var(--yellow);}
+
+footer{
+  padding:10px 32px 24px 32px;
+  font-size:11px;
+  color:var(--gray-text);
+}

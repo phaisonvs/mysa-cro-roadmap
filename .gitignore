@@ -1,0 +1,21 @@
+.history/
+
+# Editor
+.vscode/
+.idea/
+
+# Dependencies and local caches
+node_modules/
+.cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
