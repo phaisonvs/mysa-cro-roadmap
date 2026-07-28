@@ -12,7 +12,7 @@
 <header>
   <div>
     <h1>Cronograma consolidado — E-commerce ABC da Construção</h1>
-    <p>Ciclos C31–C36 · 27/07/2026 a 04/09/2026 · <span id="counttxt"></span></p>
+    <p><span id="cyclesTxt"></span> · <span id="rangeTxt"></span> · <span id="counttxt"></span></p>
   </div>
   <div class="legend">
     <span><span class="swatch" style="background:#B9B9B9"></span>Backlog</span>
@@ -23,7 +23,13 @@
 
 <div class="controls">
   <div class="chipgroup" id="filters"></div>
-  <div class="hint">Clique numa tarefa (nome ou barra) para ler por completo · arraste a área do gráfico para navegar</div>
+  <div class="hint">Clique na linha da tarefa para expandir a descri&#231;&#227;o completa · arraste a &#225;rea do gr&#225;fico para navegar</div>
+</div>
+
+<div class="cyclehead-sticky">
+  <div class="cyclehead-track" id="cycleheadTrack">
+    <div class="cyclehead" id="cyclehead"></div>
+  </div>
 </div>
 
 <div id="wrap">
