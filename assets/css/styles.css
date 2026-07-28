@@ -144,7 +144,6 @@ header p{
   z-index:40;
   background:rgba(255,255,255,.96);
   backdrop-filter:blur(8px);
-  box-shadow:0 6px 14px rgba(0,0,0,.04);
   overflow:hidden;
 }
 
@@ -284,14 +283,13 @@ header p{
   border-bottom:1px solid var(--gray-line);
   min-height:44px;
   cursor:pointer;
-  transition:background .2s ease, box-shadow .25s ease;
+  transition:background .2s ease;
 }
 
 .row:hover{background:#FFFBEF;}
 
 .row.expanded{
   background:#FFF9EA;
-  box-shadow:inset 0 0 0 1px rgba(255, 187, 0, .16);
 }
 
 .rowlabel{
@@ -370,7 +368,6 @@ header p{
 .meta-pill.mvp-pill{
   order:-1;
   font-weight:700;
-  box-shadow:none;
 }
 
 .meta-pill.mvp-pill[data-mvp="MVP1"]{
@@ -485,7 +482,6 @@ header p{
   white-space:nowrap;
   overflow:hidden;
   border:1px solid rgba(0,0,0,.15);
-  box-shadow:0 6px 12px rgba(0,0,0,.06);
   max-width:100%;
 }
 
@@ -595,7 +591,6 @@ header p{
   line-height:1.4;
   z-index:50;
   pointer-events:none;
-  box-shadow:0 6px 18px rgba(0,0,0,.25);
   display:none;
 }
 
