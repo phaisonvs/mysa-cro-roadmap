@@ -508,10 +508,10 @@ Documentar os retornos e cenários que deverão ser tratados pelo front.`,
     ciclo: "C31",
     start: "2026-07-27",
     end: "2026-07-31",
-    descricao: `Revisar a exposição de parcelamento, preço De/Por, percentual de desconto, benefício, frete grátis, retirada e prazo nos spots, vitrines, PDP e minicart.
+    descricao: `Revisar a exposição de parcelamento, incluindo a visibilidade da condição ao lado do preço, além de preço De/Por, percentual de desconto, benefício, frete grátis, retirada e prazo nos spots, vitrines, PDP e minicart.
 
 Definir quando utilizar selo, texto ou componente, evitando excesso de informações concorrentes.`,
-    obs: "Tema de exibição comercial com dependência de front e merchandising."
+    obs: "Esta tarefa absorve a necessidade antes tratada como ECOM-02 e segue direcionada ao Phaison, com dependência de front e merchandising."
   },
   {
     id: "CRO-020",
@@ -558,8 +558,8 @@ Validar a origem da relação, disponibilidade e compatibilidade antes da exibi�
     frente: "Ecom - ECOM",
     area: "ECOM",
     resp: "Fellipe Oliveira",
-    tarefa: "Carrossel de mini banner de destaque",
-    programa: "Vitrine e navegação",
+    tarefa: "Evolução das vitrines de categorias com minibanners estratégicos",
+    programa: "Painel Admin Wake",
     kpi: "Engajamento",
     tipo: "Melhoria",
     prio: "Alta",
@@ -568,26 +568,10 @@ Validar a origem da relação, disponibilidade e compatibilidade antes da exibi�
     ciclo: "C31",
     start: "2026-07-27",
     end: "2026-07-31",
-    descricao: `Criar carrossel de mini banners para destacar campanhas, categorias e vitrines com melhor leitura comercial.`,
-    obs: null
-  },
-  {
-    id: "ECOM-02",
-    frente: "Ecom - ECOM",
-    area: "ECOM",
-    resp: "Fellipe Oliveira",
-    tarefa: "Parcelamento do produto visível ao lado do preço",
-    programa: "PDP e card de produto",
-    kpi: "Conversão",
-    tipo: "Melhoria",
-    prio: "Alta",
-    mvp: "MVP1",
-    status: "Pendente",
-    ciclo: "C32",
-    start: "2026-08-03",
-    end: "2026-08-07",
-    descricao: `Exibir o parcelamento sem clique adicional, priorizando leitura rápida da condição comercial.`,
-    obs: "Quick win de conversão."
+    descricao: `Evoluir as vitrines de categorias que hoje não contemplam navegabilidade por minibanners de forma estratégica.
+
+Estruturar título, regras e comportamento do componente para destacar campanhas, categorias e acessos comerciais com gestão via painel Admin Wake.`,
+    obs: "Gestão operacional e configuração previstas via painel Admin Wake."
   },
   {
     id: "ECOM-03",
@@ -682,24 +666,6 @@ Validar a origem da relação, disponibilidade e compatibilidade antes da exibi�
     obs: null
   },
   {
-    id: "DES-01",
-    frente: "Ecom - Design",
-    area: "DESIGN",
-    resp: "Design (Mysa)",
-    tarefa: "Banners da nova Home",
-    programa: "Design",
-    kpi: "Suporte visual",
-    tipo: "Evolução",
-    prio: "Alta",
-    mvp: "MVP1",
-    status: "Pendente",
-    ciclo: "C31",
-    start: "2026-07-27",
-    end: "2026-07-31",
-    descricao: `Produzir banners da nova Home, incluindo topo, carrossel de categorias e tarja de benefícios.`,
-    obs: "Alimenta as tarefas CRO da Nova Home."
-  },
-  {
     id: "GRW-01",
     frente: "Ecom - Growth",
     area: "GROWTH",
@@ -732,6 +698,7 @@ const areaLabels = {
 let activeFilter = "ALL";
 const expandedIds = new Set();
 const collapsedCycleGroups = new Set();
+const initializedCycleGroups = new Set();
 
 const timeline = buildTimeline(tasks);
 const rangeStart = timeline.rangeStart;
@@ -970,6 +937,16 @@ function getCycleGroupKey(area, cycle) {
   return `${area}::${cycle}`;
 }
 
+function ensureInitialCycleGroupState(area, cycle) {
+  const key = getCycleGroupKey(area, cycle);
+  if (initializedCycleGroups.has(key)) {
+    return;
+  }
+
+  initializedCycleGroups.add(key);
+  collapsedCycleGroups.add(key);
+}
+
 function toggleCycleGroup(area, cycle, subgroup, body) {
   const key = getCycleGroupKey(area, cycle);
   if (collapsedCycleGroups.has(key)) {
@@ -981,13 +958,43 @@ function toggleCycleGroup(area, cycle, subgroup, body) {
   syncCycleGroupState(area, cycle, subgroup, body);
 }
 
+function updateDetailRowHeight(detailRow) {
+  if (!detailRow) {
+    return;
+  }
+
+  const isOpen = detailRow.classList.contains("open");
+  detailRow.style.maxHeight = isOpen ? "none" : "0px";
+
+  if (isOpen) {
+    detailRow.style.maxHeight = `${detailRow.scrollHeight}px`;
+  }
+}
+
+function updateCycleBodyHeight(body) {
+  if (!body) {
+    return;
+  }
+
+  const isCollapsed = body.classList.contains("collapsed");
+  body.style.maxHeight = isCollapsed ? "0px" : "none";
+
+  if (!isCollapsed) {
+    body.style.maxHeight = `${body.scrollHeight}px`;
+  }
+}
+
 function syncCycleGroupState(area, cycle, subgroup, body) {
   const key = getCycleGroupKey(area, cycle);
   const isCollapsed = collapsedCycleGroups.has(key);
   subgroup.classList.toggle("collapsed", isCollapsed);
   subgroup.setAttribute("aria-expanded", String(!isCollapsed));
   body.classList.toggle("collapsed", isCollapsed);
-  body.style.maxHeight = isCollapsed ? "0px" : `${body.scrollHeight}px`;
+  updateCycleBodyHeight(body);
+
+  if (!isCollapsed) {
+    requestAnimationFrame(() => updateCycleBodyHeight(body));
+  }
 }
 
 function syncExpandedState(id, row, detailRow, detailInner) {
@@ -995,7 +1002,17 @@ function syncExpandedState(id, row, detailRow, detailInner) {
   row.classList.toggle("expanded", isExpanded);
   row.setAttribute("aria-expanded", String(isExpanded));
   detailRow.classList.toggle("open", isExpanded);
-  detailRow.style.maxHeight = isExpanded ? `${detailRow.scrollHeight}px` : "0px";
+  updateDetailRowHeight(detailRow);
+
+  const cycleBody = detailRow.closest(".cycle-subgroup-body");
+  updateCycleBodyHeight(cycleBody);
+
+  if (isExpanded) {
+    requestAnimationFrame(() => {
+      updateDetailRowHeight(detailRow);
+      updateCycleBodyHeight(cycleBody);
+    });
+  }
 }
 
 function buildDetailRow(task) {
@@ -1090,11 +1107,13 @@ function render() {
         return;
       }
 
+      ensureInitialCycleGroupState(area, cycleInfo.cycle);
+
       const subgroup = document.createElement("div");
       subgroup.className = "cycle-subgroup";
       subgroup.setAttribute("role", "button");
       subgroup.setAttribute("tabindex", "0");
-      subgroup.setAttribute("aria-expanded", "true");
+      subgroup.setAttribute("aria-expanded", "false");
       subgroup.innerHTML = `
         <div class="cycle-subgroup-main">
           <span class="cycle-subgroup-icon" aria-hidden="true"></span>
@@ -1325,13 +1344,11 @@ window.addEventListener("resize", () => {
   syncCycleheadScroll();
 
   document.querySelectorAll(".cycle-subgroup-body").forEach((body) => {
-    if (!body.classList.contains("collapsed")) {
-      body.style.maxHeight = `${body.scrollHeight}px`;
-    }
+    updateCycleBodyHeight(body);
   });
 
   document.querySelectorAll(".detail-row.open").forEach((detailRow) => {
-    detailRow.style.maxHeight = `${detailRow.scrollHeight}px`;
+    updateDetailRowHeight(detailRow);
   });
 });
 
