@@ -1311,7 +1311,17 @@ function syncCycleheadScroll() {
   cycleheadTrack.style.transform = `translateX(${-wrap.scrollLeft}px)`;
 }
 
+function syncStickyOffsets() {
+  const controls = document.querySelector(".controls");
+  if (!controls) {
+    return;
+  }
+
+  document.documentElement.style.setProperty("--controls-sticky-height", `${controls.offsetHeight}px`);
+}
+
 window.addEventListener("resize", () => {
+  syncStickyOffsets();
   syncCycleheadScroll();
 
   document.querySelectorAll(".cycle-subgroup-body").forEach((body) => {
@@ -1328,3 +1338,13 @@ window.addEventListener("resize", () => {
 buildFilters();
 render();
 enableDragScroll();
+syncStickyOffsets();
+
+if (typeof ResizeObserver !== "undefined") {
+  const controls = document.querySelector(".controls");
+  if (controls) {
+    new ResizeObserver(() => {
+      syncStickyOffsets();
+    }).observe(controls);
+  }
+}

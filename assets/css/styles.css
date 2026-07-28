@@ -22,6 +22,7 @@
   --mvp5-text:#18335C;
   --mvp-default-bg:#E7E0F7;
   --mvp-default-text:#3D275D;
+  --controls-sticky-height:56px;
 }
 
 *{box-sizing:border-box;}
@@ -87,6 +88,9 @@ header p{
   flex-wrap:wrap;
   background:#FAFAFA;
   border-bottom:1px solid var(--gray-line);
+  position:sticky;
+  top:0;
+  z-index:45;
 }
 
 .chipgroup{
@@ -140,7 +144,7 @@ header p{
 
 .cyclehead-sticky{
   position:sticky;
-  top:0;
+  top:var(--controls-sticky-height);
   z-index:40;
   background:rgba(255,255,255,.96);
   backdrop-filter:blur(8px);
